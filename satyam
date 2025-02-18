@@ -1,0 +1,123 @@
+import java.util.Scanner;
+
+public class SquareRootCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a number: ");
+        
+        try {
+            double number = Double.parseDouble(scanner.nextLine());
+            if (number < 0) {
+                System.out.println("Error: Cannot calculate the square root of a negative number.");
+            } else {
+                double result = Math.sqrt(number);
+                System.out.println("Square root: " + result);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Invalid input. Please enter a valid number.");
+        }
+    }
+}
+Enter a number: -16
+Error: Cannot calculate the square root of a negative number.
+Enter a number: 25
+Square root: 5.0
+Enter a number: abc
+Error: Invalid input. Please enter a valid number.
+
+import java.util.Scanner;
+
+public class ATMSystem {
+    private static final int VALID_PIN = 1234;
+    private static double balance = 3000.0;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        try {
+            System.out.print("Enter PIN: ");
+            int enteredPin = Integer.parseInt(scanner.nextLine());
+            if (enteredPin != VALID_PIN) {
+                throw new Exception("Invalid PIN.");
+            }
+
+            System.out.print("Withdraw Amount: ");
+            double withdrawAmount = Double.parseDouble(scanner.nextLine());
+            if (withdrawAmount > balance) {
+                throw new Exception("Insufficient balance.");
+            }
+
+            balance -= withdrawAmount;
+            System.out.println("Withdrawal successful. Remaining Balance: " + balance);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            System.out.println("Current Balance: " + balance);
+        }
+    }
+}
+Input:
+Enter PIN: 1234
+Withdraw Amount: 5000
+
+Output:
+Error: Insufficient balance.
+Current Balance: 3000.0
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+class CourseFullException extends Exception {
+    public CourseFullException(String message) {
+        super(message);
+    }
+}
+
+class PrerequisiteNotMetException extends Exception {
+    public PrerequisiteNotMetException(String message) {
+        super(message);
+    }
+}
+
+public class UniversityEnrollmentSystem {
+    private static final int MAX_ENROLLMENT = 2; // Max students for demonstration
+    private static int currentEnrollment = 0;
+    private static HashMap<String, Boolean> prerequisites = new HashMap<>();
+
+    public static void main(String[] args) {
+        prerequisites.put("Advanced Java", false); // Prerequisite not met initially
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enroll in Course: ");
+        String course = scanner.nextLine();
+
+        if (course.equalsIgnoreCase("Advanced Java")) {
+            try {
+                checkPrerequisites(course);
+                enrollInCourse(course);
+                System.out.println("Enrollment successful for " + course);
+            } catch (PrerequisiteNotMetException | CourseFullException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Course not available.");
+        }
+    }
+
+    private static void enrollInCourse(String course) throws CourseFullException {
+        if (currentEnrollment >= MAX_ENROLLMENT) {
+            throw new CourseFullException("Course is full. Cannot enroll in " + course);
+        }
+        currentEnrollment++;
+    }
+
+    private static void checkPrerequisites(String course) throws PrerequisiteNotMetException {
+        if (!prerequisites.get(course)) {
+            throw new PrerequisiteNotMetException("Complete Core Java before enrolling in " + course);
+        }
+    }
+}
+Input:
+Enroll in Course: Advanced Java
+Output:
+Error: PrerequisiteNotMetException - Complete Core Java before enrolling in Advanced Java.
